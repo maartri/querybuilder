@@ -1,0 +1,25 @@
+<query-builder [formControl]='queryCtrl' [config]='currentConfig' 
+            [allowRuleset]='allowRuleset' [allowCollapse]='allowCollapse' 
+            [persistValueOnFieldChange]='persistValueOnFieldChange' 
+            [dataTypeArr]="dataTypeArr"
+            (emitDataType)="emitDataType($event)"></query-builder>
+
+{{ query | json }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<router-outlet></router-outlet>
