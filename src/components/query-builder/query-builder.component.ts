@@ -174,7 +174,11 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
 
   ngOnInit() { 
 
+    const dataTypeArr = ['AccountConfig','InvoiceRule']
+    this.dataTypeArr = dataTypeArr;
     console.log(this.dataTypeArr)
+
+    // this.data.dataTypeArr = dataTypeArr;
   }
 
   // ----------OnChanges Implementation----------
@@ -505,7 +509,9 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
 
   changeDataType(value: string): void{
     console.log(value);
-    this.emitDataType.emit(value);
+
+    console.log(this.data)
+    // this.emitDataType.emit(value);
     // if(value == 'AccountConfig'){
     //   this.emitDataType.emit(value);
     // }
