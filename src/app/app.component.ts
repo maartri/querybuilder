@@ -103,7 +103,7 @@ public config: QueryBuilderConfig = {
     if(data == 'InvoiceRule'){
       this.config = {
         fields: {
-          priority: {name: 'Active', type: 'number'},
+          active: {name: 'Active', type: 'number'},
           resultaction: { name: 'ResultAction', type: 'string' },
           reasoncode: { name: 'ReasonCode', type: 'string' },
           actioncommentstemplate: { name: 'ActionCommentsTemplate', type: 'string' },

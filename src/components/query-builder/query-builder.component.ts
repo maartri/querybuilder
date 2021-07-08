@@ -176,7 +176,7 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
 
     const dataTypeArr = ['AccountConfig','InvoiceRule']
     this.dataTypeArr = dataTypeArr;
-    console.log(this.dataTypeArr)
+    // console.log(this.dataTypeArr)
 
     // this.data.dataTypeArr = dataTypeArr;
   }
@@ -184,9 +184,46 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
   // ----------OnChanges Implementation----------
 
   ngOnChanges(changes: SimpleChanges) {
+    // console.log(this.data.dataType)
+
+    const data = this.data.dataType;
+    if(data == 'AccountConfig'){
+      this.config = {
+          fields: {
+            active: {name: 'Active', type: 'number'},
+            currency: { name: 'Currency', type: 'string' },
+            overchargeamount: { name: 'OverchargeAmount', type: 'string' },
+            overchargetype: { name: 'OverchargeType', type: 'string' },
+            underchargeamount: { name: 'UnderchargeAmount', type: 'string' },
+            underchargetype: { name: 'UnderchargeType', type: 'string' },
+            runaudit: { name: 'RunAudit', type: 'string' },
+            runtmsmatch: { name: 'RunTmsMatch', type: 'string' },
+            savetmsmatchdata: { name: 'SaveTmsMatchData', type: 'string' },
+            addtolerancesavings: { name: 'AddToleranceSavings', type: 'string' },
+            runpomatch: { name: 'RunPoMatch', type: 'string' }
+        }
+      }
+  }
+
+  if(data == 'InvoiceRule'){
+    this.config = {
+      fields: {
+        active: {name: 'Active', type: 'number'},
+        resultaction: { name: 'ResultAction', type: 'string' },
+        reasoncode: { name: 'ReasonCode', type: 'string' },
+        actioncommentstemplate: { name: 'ActionCommentsTemplate', type: 'string' },
+        webresallocation: { name: 'WebResAllocation', type: 'string' },
+        validategolivedate: { name: 'ValidateGoLiveDate', type: 'string' },
+        validatepdfprovided: { name: 'ValidatePdfProvided', type: 'string' },
+        validatefield: { name: 'ValidateField', type: 'string' },
+        validatebalancecheck: { name: 'ValidateBalanceCheck', type: 'string' },
+        compareproperties: { name: 'CompareProperties', type: 'string' },
+      }
+    }
+  }
     const config = this.config;
     const type = typeof config;
-    console.log(config);
+
     if (type === 'object') {
       this.fields = Object.keys(config.fields).map((value) => {
         const field = config.fields[value];
@@ -244,7 +281,7 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
   }
 
   writeValue(obj: any): void {
-    console.log(obj);
+    // console.log(obj);
     this.value = obj;
   }
   registerOnChange(fn: any): void {
@@ -320,35 +357,51 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
   }
 
   getFields(entity: string): Field[] {
+    // console.log(entity);
     if (this.entities && entity) {
       return this.fields.filter((field) => {
         return field && field.entity === entity;
       });
     } else {
+      if(this.dataType == 'AccountConfig'){
+        return [{"name":"Active","type":"number","value":"active"},{"name":"Currency","type":"string","value":"currency"},{"name":"OverchargeAmount","type":"string","value":"overchargeamount"},{"name":"OverchargeType","type":"string","value":"overchargetype"},{"name":"UnderchargeAmount","type":"string","value":"underchargeamount"},{"name":"UnderchargeType","type":"string","value":"underchargetype"},{"name":"RunAudit","type":"string","value":"runaudit"},{"name":"RunTmsMatch","type":"string","value":"runtmsmatch"},{"name":"SaveTmsMatchData","type":"string","value":"savetmsmatchdata"},{"name":"AddToleranceSavings","type":"string","value":"addtolerancesavings"},{"name":"RunPoMatch","type":"string","value":"runpomatch"}];
+      }
+      if(this.dataType == 'InvoiceRule'){
+        return [{"name":"Active","type":"number","value":"active"},{"name":"ResultAction","type":"string","value":"resultaction"},{"name":"ReasonCode","type":"string","value":"reasoncode"},{"name":"ActionCommentsTemplate","type":"string","value":"actioncommentstemplate"},{"name":"WebResAllocation","type":"string","value":"webresallocation"},{"name":"ValidateGoLiveDate","type":"string","value":"validategolivedate"},{"name":"ValidatePdfProvided","type":"string","value":"validatepdfprovided"},{"name":"ValidateField","type":"string","value":"validatefield"},{"name":"ValidateBalanceCheck","type":"string","value":"validatebalancecheck"},{"name":"CompareProperties","type":"string","value":"compareproperties"}];
+      }
       return this.fields;
     }
   }
 
+
+
   getInputType(field: string, operator: string): string {
+
     if (this.config.getInputType) {
       return this.config.getInputType(field, operator);
     }
 
-    if (!this.config.fields[field]) {
-      throw new Error(`No configuration for field '${field}' could be found! Please add it to config.fields.`);
-    }
+    this.data.rules.forEach((x: Rule) => {
+      x.field = 'active'
+    });
+    
 
-    const type = this.config.fields[field].type;
-    switch (operator) {
-      case 'is null':
-      case 'is not null':
-        return null;  // No displayed component
-      case 'in':
-      case 'not in':
-        return type === 'category' || type === 'boolean' ? 'multiselect' : type;
-      default:
-        return type;
+    if (this.config.fields[field]) {
+      // return;
+      const type = this.config.fields[field].type;
+      switch (operator) {
+        case 'is null':
+        case 'is not null':
+          return null;
+        case 'in':
+        case 'not in':
+          return type === 'category' || type === 'boolean' ? 'multiselect' : type;
+        default:
+          return type;
+      }
+      //  throw new Error(`No configuration for field '${field}' could be found! Please add it to config.fields.`);
     }
+    return '';   
   }
 
   getOptions(field: string): Option[] {
@@ -454,7 +507,7 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
     if (this.config.addRuleSet) {
       this.config.addRuleSet(parent);
     } else {
-      console.log(parent)
+      // console.log(parent)
       parent.rules = parent.rules.concat([{ condition: 'and', dataType: 'AccountConfig', rules: [] }]);
     }
 
@@ -507,18 +560,15 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
     this.handleDataChange();
   }
 
+  dataType: string;
+
   changeDataType(value: string): void{
-    console.log(value);
+    if(value){
+        console.log(value);
+        this.dataType = value;     
+    }
 
-    console.log(this.data)
-    // this.emitDataType.emit(value);
-    // if(value == 'AccountConfig'){
-    //   this.emitDataType.emit(value);
-    // }
-
-    // if(value == 'InvoiceRule'){
-    //   this.emitDataType.emit(value);
-    // }
+    this.emitDataType.emit(value);   
   }
 
   changeOperator(rule: Rule): void {
