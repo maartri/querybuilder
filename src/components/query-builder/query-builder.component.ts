@@ -332,8 +332,9 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
     if (this.config.getOperators) {
       return this.config.getOperators(field, fieldObject);
     }
-
+    console.log(fieldObject);
     const type = fieldObject.type;
+    
 
     if (fieldObject && fieldObject.operators) {
       operators = fieldObject.operators;
@@ -381,9 +382,9 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
       return this.config.getInputType(field, operator);
     }
 
-    this.data.rules.forEach((x: Rule) => {
-      x.field = 'active'
-    });
+    // this.data.rules.forEach((x: Rule) => {
+    //   x.field = 'active'
+    // });
     
 
     if (this.config.fields[field]) {
