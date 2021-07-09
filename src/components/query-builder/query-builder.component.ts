@@ -323,16 +323,24 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
   }
 
   getOperators(field: string): string[] {
+
+    if(field === undefined){
+      return ["=", "!=", ">", ">=", "<", "<="];
+    }
+
     if (this.operatorsCache[field]) {
       return this.operatorsCache[field];
     }
+
     let operators = this.defaultEmptyList;
     const fieldObject = this.config.fields[field];
 
     if (this.config.getOperators) {
       return this.config.getOperators(field, fieldObject);
     }
-    console.log(fieldObject);
+    if(fieldObject === undefined){
+      return ["=", "!=", ">", ">=", "<", "<="];
+    }
     const type = fieldObject.type;
     
 
@@ -354,6 +362,7 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
 
     // Cache reference to array object, so it won't be computed next time and trigger a rerender.
     this.operatorsCache[field] = operators;
+    console.log(operators);
     return operators;
   }
 
@@ -385,11 +394,17 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
     // this.data.rules.forEach((x: Rule) => {
     //   x.field = 'active'
     // });
-    
+    // console.log(field +' ' +  operator)
+    console.log(this.config.fields[field]);
+
+    if(this.config.fields[field] === undefined){
+      return null
+    }
 
     if (this.config.fields[field]) {
       // return;
       const type = this.config.fields[field].type;
+      console.log(type);
       switch (operator) {
         case 'is null':
         case 'is not null':
@@ -402,7 +417,7 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
       }
       //  throw new Error(`No configuration for field '${field}' could be found! Please add it to config.fields.`);
     }
-    return '';   
+    return 'string';   
   }
 
   getOptions(field: string): Option[] {
@@ -564,8 +579,9 @@ export class QueryBuilderComponent implements OnInit, OnChanges, ControlValueAcc
   dataType: string;
 
   changeDataType(value: string): void{
+    // console.log(this.data);
+
     if(value){
-        console.log(value);
         this.dataType = value;     
     }
 
